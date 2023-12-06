@@ -1,0 +1,16 @@
+trigger:
+- master
+
+pool:
+  name: Default
+
+steps:
+- script: az login --service-principal -u c65768b6-da6a-4f1f-b961-61f22a8dc775 -p jYW8Q~5XaDNF1b6Jwj8rktQrauvrYAzv6tAaAcz. --tenant 84f1e4ea-8554-43e1-8709-f0b8589ea118
+  displayName: 'az login'
+- script: az acr login --name eloacrprd
+  displayName: 'az acr login'
+- script: sudo docker build -t eloacrprd.azurecr.io/wordpress-01:latest $(System.DefaultWorkingDirectory)
+  displayName: 'docker build'
+- script: sudo docker push eloacrprd.azurecr.io/wordpress-01:latest
+  displayName: 'docker push'
+

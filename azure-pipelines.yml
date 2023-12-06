@@ -1,0 +1,29 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  imageRepo: wordpress01
+  tag: '$(Build.BuildId)'
+  acrName: eloacrprd
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build and push image to ACR
+      inputs:
+        containerRegistry: $(acrName)
+        repository: $(imageRepo)
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          $(tag)
